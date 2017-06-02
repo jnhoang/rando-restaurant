@@ -14,6 +14,7 @@ class App extends Component {
       <Router>
         <Route exact path="/" component={Home} />
       </Router> 
+
     );
   }
 }
