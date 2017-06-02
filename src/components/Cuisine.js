@@ -21,9 +21,9 @@ class Cuisine extends Component {
       fetch(giphyLink + food + ' food' + giphyAPIKey)
       .then( (res) =>  res.json() )
       .then( (json) => {
-        results.push(json.data[0].images.fixed_height.url);
+        results.push({[food]: json.data[0].images.fixed_height.url});
         // console.log(results);
-        console.log('res: ', json.data[0].images.fixed_height.url)
+        console.log('res: ', results)
         
         this.setState({
           images: results
@@ -45,9 +45,9 @@ class Cuisine extends Component {
       <div>
         <h1>Cuisine</h1>
         <ul>
-          {this.state.images.map( (img, index) => <img key={index} src={img} alt=""/>)}
-          
-          {this.state.cuisines.map( (food, index) => <li key={index}><button name={food} onClick={ (e) => this.deleteCuisine(e.target.name) }>{food}</button></li> )}
+          {this.state.images.map( (obj, index) => <li key={index}><img src={obj[Object.keys(obj)]}/><button name={Object.keys(obj)} onClick={ (e) => this.deleteCuisine(e.target.name) }>{Object.keys(obj)}</button></li> )}
+
+          {/*{this.state.cuisines.map( (food, index) => <li key={index}><img src={this.state.images[index][food]}/><button name={food} onClick={ (e) => this.deleteCuisine(e.target.name) }>{food}</button></li> )}*/}
         </ul>
       </div>
     );
