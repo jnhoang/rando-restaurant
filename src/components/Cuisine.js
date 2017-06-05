@@ -1,20 +1,21 @@
 import React, {Component} from 'react';
 
-const giphyAPIKey = '&api_key=dc6zaTOxFJmzC';
-const giphyLink = 'http://api.giphy.com/v1/gifs/search?q=';
+const giphyAPIKey   = '&api_key=dc6zaTOxFJmzC';
+const giphyLink     = 'http://api.giphy.com/v1/gifs/search?q=';
+const originalArr   = ["Mexican", "Chinese", "Japanese", "Thai", "American", "Indian", "Soul", "Cambodian", "French", "Greek", "Vietnamese"];
 
 class Cuisine extends Component {
   constructor() {
     super();
     this.state = {
-      cuisines: ["Mexican", "Chinese", "Japanese", "Thai", "American", "Indian", "Soul", "Cambodian", "French", "Greek", "Vietnamese"]
-    , images: []
+      cuisines: originalArr
+    , imgLinks: []
     };
 
   }
   componentDidMount() {
     let cuisines  = this.state.cuisines;
-    let results   = this.state.images;
+    let results   = this.state.imgLinks;
 
     // giphy call for each choice item in cuisine array
     cuisines.map( (food) => {
@@ -22,50 +23,60 @@ class Cuisine extends Component {
       .then( (res)  =>  res.json() )
       .then( (json) => {
         // adds the resulting image to a state arr
-        results.push({[food]: json.data[0].images.fixed_height.url});    
+        results.push({ 
+          name: food
+        , link: json.data[0].images.fixed_height.url
+        }); 
+        console.log(results)
         this.setState({
-          images: results
+          imgLinks: results
         });
       })
       .catch( (err) => console.log('error: ', err) );   
     })
   }
   deleteCuisine(cuisine) {
-    let temp = this.state.cuisines.filter( (food) => food !== cuisine);
-
-    this.setState({cuisines: temp});
+    let tempImgLinks = this.state.imgLinks;
+    let test = tempImgLinks.filter( (food) => food.name !== cuisine );
+    
+    this.setState({imgLinks: test});
+    console.log('state: ', this.state)
   }
   handleReset() {
-
+    console.log(this.state)
+    this.setState({cuisines: originalArr});
   }
   handleRandom() {
-
+    let rand = Math.floor(Math.random() * this.state.cuisines.length);
+    //this.setState({})
+    console.log(rand);
   }
   render () {
     return (
       <div>
         <h1>Cuisine</h1>
-        <ul>
-          {this.state.images.map( (obj, index) => 
-            <li key={index}>
-              <img src={obj[Object.keys(obj)]}/>
-              <button 
-                name={Object.keys(obj)} 
-                onClick={ (e) => this.deleteCuisine(e.target.name) }>
-                { Object.keys(obj) }
-              </button>
-            </li> 
-          )}
-        </ul>
-
         <button
           onClick={ (e) => this.handleReset(e) }>
           Reset
         </button>
         <button
           onClick={ (e) => this.handleRandom(e) }>
-          Reset
+          Random
         </button>
+        <ul>
+          {this.state.imgLinks.map( (obj, index) => 
+            <li key={index}>
+              <img 
+                src={obj.link} 
+                alt={obj.name}/>
+              <button
+                name={obj.name}
+                onClick={ (e) => this.deleteCuisine(e.target.name) }>
+                {obj.name}
+              </button>
+            </li>
+          )}
+        </ul>
       </div>
     );
   }
