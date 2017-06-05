@@ -8,14 +8,15 @@ class Cuisine extends Component {
   constructor() {
     super();
     this.state = {
-      cuisines: originalArr
-    , imgLinks: []
+      cuisines: originalArr,
+      imgLinks: [],
+      original: []
     };
 
   }
   componentDidMount() {
     let cuisines  = this.state.cuisines;
-    let results   = this.state.imgLinks;
+    let results   = [];
 
     // giphy call for each choice item in cuisine array
     cuisines.map( (food) => {
@@ -27,9 +28,10 @@ class Cuisine extends Component {
           name: food
         , link: json.data[0].images.fixed_height.url
         }); 
-        console.log(results)
+
         this.setState({
-          imgLinks: results
+          imgLinks: results,
+          original: results
         });
       })
       .catch( (err) => console.log('error: ', err) );   
@@ -43,8 +45,7 @@ class Cuisine extends Component {
     console.log('state: ', this.state)
   }
   handleReset() {
-    console.log(this.state)
-    this.setState({cuisines: originalArr});
+    this.setState({imgLinks: this.state.original})
   }
   handleRandom() {
     let rand = Math.floor(Math.random() * this.state.cuisines.length);
