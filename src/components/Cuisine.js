@@ -49,8 +49,8 @@ class Cuisine extends Component {
   }
   handleRandom() {
     let rand = Math.floor(Math.random() * this.state.cuisines.length);
-    //this.setState({})
-    console.log(rand);
+    console.log(rand)
+    this.setState({imgLinks: this.state.imgLinks[rand]});
   }
   render () {
     return (
